@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>如何照顧貓咪 | How to Care for Cats</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --bg-alt: #f4f6f8;
+        --text: #2d3436;
+        --text-light: #636e72;
+        --primary: #0984e3;
+        --primary-hover: #0769b5;
+        --border: #dfe6e9;
+        --radius: 6px;
+        --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC",
+          sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font);
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.8;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        border-bottom: 2px solid var(--border);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+      }
+      .logo {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        margin: 0 2rem;
+        gap: 1rem;
+      }
+      .nav-left {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .nav-left a {
+        font-weight: 500;
+        padding: 0.5rem 0;
+        transition: color 0.2s;
+      }
+      .nav-left a:hover,
+      .nav-left a.active {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .nav-right {
+        margin-left: auto;
+      }
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropbtn {
+        background: none;
+        border: none;
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .dropbtn:hover {
+        background: var(--bg-alt);
+      }
+      .dropbtn::after {
+        content: "▼";
+        font-size: 0.6em;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: var(--bg);
+        min-width: 160px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-top: 0.5rem;
+        z-index: 101;
+      }
+      .dropdown-content.show {
+        display: block;
+      }
+      .dropdown-content a {
+        display: block;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+      }
+      .dropdown-content a:hover {
+        background: var(--bg-alt);
+        color: var(--primary);
+      }
+      .lang-toggle {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+      .lang-toggle:hover {
+        background: var(--primary-hover);
+      }
+
+      main {
+        padding-bottom: 4rem;
+      }
+      .content-section {
+        padding: 4rem 2rem;
+        max-width: 850px;
+        margin: 0 auto;
+      }
+      .content-section h1 {
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: var(--primary);
+      }
+      .content-section h2 {
+        font-size: 1.35rem;
+        margin: 2.5rem 0 1rem;
+        color: var(--text);
+        border-left: 4px solid var(--primary);
+        padding-left: 0.8rem;
+      }
+      .content-section p {
+        color: var(--text-light);
+        margin-bottom: 1rem;
+        text-align: justify;
+      }
+      .content-section ul {
+        padding-left: 1.2rem;
+      }
+      .content-section li {
+        margin-bottom: 0.8rem;
+        padding-left: 0.5rem;
+        color: var(--text-light);
+        position: relative;
+      }
+      .content-section li::before {
+        content: "•";
+        color: var(--primary);
+        font-weight: bold;
+        position: absolute;
+        left: -1rem;
+      }
+      .back-link {
+        margin-top: 3rem;
+        text-align: center;
+      }
+      .back-link a {
+        color: var(--primary);
+        font-weight: 500;
+        transition: opacity 0.2s;
+      }
+      .back-link a:hover {
+        opacity: 0.8;
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem;
+        background: var(--bg-alt);
+        border-top: 2px solid var(--border);
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+      @media (max-width: 768px) {
+        header {
+          flex-wrap: wrap;
+        }
+        nav {
+          order: 3;
+          width: 100%;
+          margin: 1rem 0 0;
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: stretch;
+        }
+        .nav-left,
+        .nav-right {
+          width: 100%;
+          justify-content: center;
+          margin-left: 0;
+        }
+        .dropdown-content {
+          position: static;
+          border: none;
+          box-shadow: none;
+          background: var(--bg-alt);
+          margin-top: 0.5rem;
+        }
+        .content-section {
+          padding: 3rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="logo">🐱 貓咪百科 Cat Encyclopedia</a>
+      <nav>
+        <div class="nav-left">
+          <a href="index.html" data-i18n="nav_home">主頁</a>
+          <a href="index.html#what-is-cat" data-i18n="nav_what">什麼是貓</a>
+          <a href="care.html" data-i18n="nav_care">如何照顧</a>
+          <a href="index.html#family-tree" data-i18n="nav_tree">貓科動物族譜</a>
+          <a href="detector-standalone.html" data-i18n="nav_detector" style="color:var(--primary);font-weight:600">🔍 貓咪品種辨別器</a>
+</div>
+        </div>
+        <div class="nav-right">
+          <div class="dropdown">
+            <!-- ✅ 連結文字：點擊直接跳轉 breeds.html -->
+            <a href="breeds.html" class="nav-link" data-i18n="nav_common"
+              >常見的貓</a
+            >
+            <!-- ✅ 獨立箭頭按鈕：點擊展開/收起下拉選單 -->
+            <button class="drop-arrow" aria-label="展開選單">▼</button>
+            <div class="dropdown-content">
+              <a href="breeds.html#british-shorthair" data-i18n="common_1"
+                >英國短毛貓</a
+              >
+              <a href="breeds.html#ragdoll" data-i18n="common_2">布偶貓</a>
+              <a href="breeds.html#american-shorthair" data-i18n="common_3"
+                >美國短毛貓</a
+              >
+              <a href="breeds.html#birman" data-i18n="common_4">伯曼貓</a>
+              <a href="breeds.html#siamese" data-i18n="common_5">暹羅貓</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <button id="lang-btn" class="lang-toggle">EN</button>
+    </header>
+
+    <main>
+      <section class="content-section">
+        <h1 data-i18n="care_title">如何照顧貓</h1>
+
+        <h2 data-i18n="care_bed_title">🛏️ 貓窩選擇</h2>
+        <p data-i18n="care_bed_desc">
+          貓窩就是貓睡覺的地方，大體上分兩種：屋形的和盆形的。大部分貓睡覺時喜歡有頂的屋形窩，無頂的盆形窩大多用於平時躺下休息。寵物店專賣的屋形貓窩外形類似人們用的旅行帳篷，整體呈錐形，開門處帶有一定傾斜角度。因為貓是很機警的動物，這樣的設計可以開闊視野，幫助牠消除局促緊張和缺乏安全感的問題。家裏有條件的最好兩種窩各備一個，讓貓自由選擇，保持心情愉快。如不願購買專門貓窩，用廢紙箱挖個門改裝即可。
+        </p>
+
+        <h2 data-i18n="care_bowls_title">🥣 飲食餐具</h2>
+        <p data-i18n="care_bowls_desc">
+          貓對自己的餐具非常敏感，因此選定後最好不要隨意更換。突然換盆可能導致拒食或消化不良，尤其對老年貓會造成緊張，影響健康。請一開始就挑選堅固耐用、容量適中的餐具。挑選時可依據臉型：尖臉貓（如暹羅貓、美短）適合碗口小而深的餐具；圓臉貓（如英短、金吉拉）適合大口寬碗；平臉貓（如波斯貓、異國短毛貓）建議使用淺盤，因為扁平的臉型不易吃到深碗底部的食物，淺盤能避免吞入過多空氣造成胃脹。此外，平臉貓不宜用太深的水碗，以免弄濕下巴與臉頰毛髮。
+        </p>
+
+        <h2 data-i18n="care_food_title">🍖 餵養食物</h2>
+        <p data-i18n="care_food_desc">
+          貓對食物十分挑剔，挑選貓糧確實令人頭痛。市售貓糧大致分為罐頭、半混糧和乾糧三種。雖然商業貓糧安全、科學且方便，但只應作為飲食的一部分。最理想的飲食是每周添加
+          1~2
+          次新鮮肉食或魚類，提供高蛋白質、熱能與必需氨基酸，對發育至關重要。為防範弓形蟲，所有肉類必須徹底煮熟，並切成細塊方便咀嚼；餵魚前務必仔細剔除魚骨魚刺，以防刺傷消化道。幼貓的飲食需特別照顧，建議遵循獸醫指示。
+        </p>
+
+        <h2 data-i18n="care_litter_title">🚽 訓練排便</h2>
+        <p data-i18n="care_litter_desc">
+          貓是相當愛乾淨的動物，天生不會隨地大小便。牠們主要依靠嗅覺確認如廁位置，第一次在哪裡方便，下次仍會循味而去。若想訓練牠在固定位置（如洗手間），當貓在不合適處排泄時，請立即清理並用消毒水徹底去除氣味，即可防止再次發生。最簡單的方法是準備貓砂盆與貓砂，貓對此無師自通，排便後會本能地扒土掩蓋。只需記得定期鏟屎、保持砂盆清潔即可。
+        </p>
+
+        <h2 data-i18n="care_neuter_title">✂️ 絕育手術</h2>
+        <p data-i18n="care_neuter_desc">
+          術前請先為貓修剪指甲，避免術後抓撓傷口包紮紗布。手術前需提前補充營養，因術後疼痛可能導致食慾下降，營養不足不利於恢復。請嚴格遵守術前禁食
+          8 小時、禁水 4
+          小時的規定。手術中需確保麻醉與止痛完善。術後勿強迫進食，限制跳躍等劇烈運動以防傷口裂開，可暫時安置於籠內靜養。冬季注意保暖（可放置毛巾包裹的熱水袋），夏季注意防暑（籠頂蓋濕毛巾降溫）。密切監測體溫與排便，若出現傷口發炎、感染或異常疼痛，請立即送醫。
+        </p>
+
+        <h2 data-i18n="care_illness_title">🏥 生病護理</h2>
+        <ul>
+          <li data-i18n="care_illness_1">
+            寄生蟲：3 個月大的貓即可開始驅蟲，之後每年 2
+            次。一般廣譜驅蟲藥即可。貓易患心絲蟲，平日應避免餵食生肉與生魚。
+          </li>
+          <li data-i18n="care_illness_2">
+            骨折：若貓出現跛行或無法行走，主人很難自行判斷是撞傷、骨折或脫臼。請盡量減少移動，固定後立即帶往醫院檢查。
+          </li>
+          <li data-i18n="care_illness_3">
+            出血：先確認傷口位置，剃除周圍毛髮並清理。出血量少時，用自來水或 3%
+            雙氧水清洗後包紮；出血量大時，除加壓包紮外應立即送醫急救。
+          </li>
+        </ul>
+
+        <h2 data-i18n="care_vaccine_title">💉 定期防疫</h2>
+        <p data-i18n="care_vaccine_desc">
+          目前獸醫常施打的疫苗包含進口貓三聯疫苗與國產貓瘟熱疫苗。請注意：只有健康的貓才能接種。疫苗應每年接種
+          1 次，切勿認為貓不出門就不需施打，或打完 2~3
+          次後就停止。主人外出可能成為病毒攜帶媒介，停打將增加感染風險。接種後 1
+          周內建議暫緩洗澡，以防溫差引發感冒影響免疫效果，或針眼受污染導致感染。少數免疫力較差的貓可能無法產生足夠抗體，需額外留意健康狀況。
+        </p>
+
+        <div class="back-link">
+          <a href="index.html" data-i18n="back_home">← 返回主頁</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p data-i18n="footer_text">© 2026 貓咪百科. 保留所有權利.</p>
+    </footer>
+
+    <script>
+      const translations = {
+        zh: {
+          nav_home: "主頁",
+          nav_what: "什麼是貓",
+          nav_care: "如何照顧",
+          nav_tree: "貓科動物族譜",
+          nav_detector: "🔍 貓咪品種辨別器",
+          nav_common: "常見的貓",
+          common_1: "品種 1",
+          common_2: "品種 2",
+          common_3: "品種 3",
+          common_4: "品種 4",
+          common_5: "品種 5",
+          care_title: "如何照顧貓",
+          care_bed_title: "🛏️ 貓窩選擇",
+          care_bed_desc:
+            "貓窩就是貓睡覺的地方，大體上分兩種：屋形的和盆形的。大部分貓睡覺時喜歡有頂的屋形窩，無頂的盆形窩大多用於平時躺下休息。寵物店專賣的屋形貓窩外形類似人們用的旅行帳篷，整體呈錐形，開門處帶有一定傾斜角度。因為貓是很機警的動物，這樣的設計可以開闊視野，幫助牠消除局促緊張和缺乏安全感的問題。家裏有條件的最好兩種窩各備一個，讓貓自由選擇，保持心情愉快。如不願購買專門貓窩，用廢紙箱挖個門改裝即可。",
+          care_bowls_title: "🥣 飲食餐具",
+          care_bowls_desc:
+            "貓對自己的餐具非常敏感，因此選定後最好不要隨意更換。突然換盆可能導致拒食或消化不良，尤其對老年貓會造成緊張，影響健康。請一開始就挑選堅固耐用、容量適中的餐具。挑選時可依據臉型：尖臉貓（如暹羅貓、美短）適合碗口小而深的餐具；圓臉貓（如英短、金吉拉）適合大口寬碗；平臉貓（如波斯貓、異國短毛貓）建議使用淺盤，因為扁平的臉型不易吃到深碗底部的食物，淺盤能避免吞入過多空氣造成胃脹。此外，平臉貓不宜用太深的水碗，以免弄濕下巴與臉頰毛髮。",
+          care_food_title: "🍖 餵養食物",
+          care_food_desc:
+            "貓對食物十分挑剔，挑選貓糧確實令人頭痛。市售貓糧大致分為罐頭、半混糧和乾糧三種。雖然商業貓糧安全、科學且方便，但只應作為飲食的一部分。最理想的飲食是每周添加 1~2 次新鮮肉食或魚類，提供高蛋白質、熱能與必需氨基酸，對發育至關重要。為防範弓形蟲，所有肉類必須徹底煮熟，並切成細塊方便咀嚼；餵魚前務必仔細剔除魚骨魚刺，以防刺傷消化道。幼貓的飲食需特別照顧，建議遵循獸醫指示。",
+          care_litter_title: "🚽 訓練排便",
+          care_litter_desc:
+            "貓是相當愛乾淨的動物，天生不會隨地大小便。牠們主要依靠嗅覺確認如廁位置，第一次在哪裡方便，下次仍會循味而去。若想訓練牠在固定位置（如洗手間），當貓在不合適處排泄時，請立即清理並用消毒水徹底去除氣味，即可防止再次發生。最簡單的方法是準備貓砂盆與貓砂，貓對此無師自通，排便後會本能地扒土掩蓋。只需記得定期鏟屎、保持砂盆清潔即可。",
+          care_neuter_title: "✂️ 絕育手術",
+          care_neuter_desc:
+            "術前請先為貓修剪指甲，避免術後抓撓傷口包紮紗布。手術前需提前補充營養，因術後疼痛可能導致食慾下降，營養不足不利於恢復。請嚴格遵守術前禁食 8 小時、禁水 4 小時的規定。手術中需確保麻醉與止痛完善。術後勿強迫進食，限制跳躍等劇烈運動以防傷口裂開，可暫時安置於籠內靜養。冬季注意保暖（可放置毛巾包裹的熱水袋），夏季注意防暑（籠頂蓋濕毛巾降溫）。密切監測體溫與排便，若出現傷口發炎、感染或異常疼痛，請立即送醫。",
+          care_illness_title: "🏥 生病護理",
+          care_illness_1:
+            "寄生蟲：3 個月大的貓即可開始驅蟲，之後每年 2 次。一般廣譜驅蟲藥即可。貓易患心絲蟲，平日應避免餵食生肉與生魚。",
+          care_illness_2:
+            "骨折：若貓出現跛行或無法行走，主人很難自行判斷是撞傷、骨折或脫臼。請盡量減少移動，固定後立即帶往醫院檢查。",
+          care_illness_3:
+            "出血：先確認傷口位置，剃除周圍毛髮並清理。出血量少時，用自來水或 3% 雙氧水清洗後包紮；出血量大時，除加壓包紮外應立即送醫急救。",
+          care_vaccine_title: "💉 定期防疫",
+          care_vaccine_desc:
+            "目前獸醫常施打的疫苗包含進口貓三聯疫苗與國產貓瘟熱疫苗。請注意：只有健康的貓才能接種。疫苗應每年接種 1 次，切勿認為貓不出門就不需施打，或打完 2~3 次後就停止。主人外出可能成為病毒攜帶媒介，停打將增加感染風險。接種後 1 周內建議暫緩洗澡，以防溫差引發感冒影響免疫效果，或針眼受污染導致感染。少數免疫力較差的貓可能無法產生足夠抗體，需額外留意健康狀況。",
+          back_home: "← 返回主頁",
+          footer_text: "© 2026 貓咪百科. 保留所有權利.",
+        },
+        en: {
+          nav_home: "Home",
+          nav_what: "What is a Cat?",
+          nav_care: "How to Care",
+          nav_tree: "Cat Family Tree",
+          nav_detector: "🔍 Cat Breed Detector",
+          nav_common: "Common Cats",
+          common_1: "Breed 1",
+          common_2: "Breed 2",
+          common_3: "Breed 3",
+          common_4: "Breed 4",
+          common_5: "Breed 5",
+          care_title: "How to Care for Cats",
+          care_bed_title: "🛏️ Choosing a Cat Bed",
+          care_bed_desc:
+            "Cat beds are primarily divided into house-shaped (enclosed) and bowl-shaped (open) types. Most cats prefer enclosed beds for sleeping, while open bowls are used for lounging. Commercial house beds resemble travel tents with a conical shape and angled entrances. This design provides a wide field of view, helping alert cats feel secure and reducing anxiety. Ideally, provide both types for comfort and freedom of choice. If you prefer not to buy a commercial bed, a cardboard box with a cut-out door works perfectly.",
+          care_bowls_title: "🥣 Food & Water Bowls",
+          care_bowls_desc:
+            "Cats are highly sensitive to their feeding dishes, so avoid changing them frequently. Sudden changes can cause food refusal, digestive issues, or stress, especially in older cats. Choose durable, appropriately sized dishes from the start. Match the shape to the cat's face: deep, narrow bowls for pointed faces (Siamese, American Shorthair); wide, shallow bowls for round faces (British Shorthair, Chinchilla); and flat plates for flat-faced breeds (Persian, Exotic Shorthair). Flat faces struggle to reach food in deep bowls, and plates prevent air swallowing and bloating. Also, avoid deep water bowls for flat-faced cats to keep their chins dry.",
+          care_food_title: "🍖 Feeding & Diet",
+          care_food_desc:
+            "Cats are picky eaters, making food selection challenging. Commercial foods include canned, semi-moist, and dry kibble. While commercial diets are safe and convenient, they should only be part of their meals. Ideally, supplement 1-2 times weekly with fresh cooked meat or fish to provide high-quality protein, energy, and essential amino acids crucial for development. To prevent toxoplasmosis, all meat must be thoroughly cooked and cut into small pieces for easy chewing. Always carefully debone fish to avoid choking or internal injury. Kittens require specialized dietary care under veterinary guidance.",
+          care_litter_title: "🚽 Litter Training",
+          care_litter_desc:
+            "Cats are naturally clean and will not soil randomly. They rely on scent to identify litter areas, returning to the same spot. To train them to use a specific location (e.g., bathroom), immediately clean any accidents and use disinfectant to remove odors, which prevents repeat offenses. The simplest method is providing a litter box with cat litter. Cats instinctively know how to use it and will bury their waste. Just remember to scoop regularly and keep the box clean.",
+          care_neuter_title: "✂️ Spaying/Neutering Surgery",
+          care_neuter_desc:
+            "Trim your cat's nails before surgery to prevent scratching post-op bandages. Provide extra nutrition pre-op, as pain may reduce appetite afterward. Strictly follow fasting rules: 8 hours no food, 4 hours no water before surgery. Ensure proper anesthesia and pain management. Post-op: do not force-feed, restrict jumping/vigorous activity to prevent wound dehiscence (use a recovery cage). Keep warm in winter (warm water bottle wrapped in a towel) and cool in summer (damp towel over cage). Monitor temperature and bowel movements. Seek immediate vet care if signs of infection, severe pain, or complications appear.",
+          care_illness_title: "🏥 Illness & First Aid",
+          care_illness_1:
+            "Parasites: Deworm at 3 months old, then twice yearly. Broad-spectrum dewormers work well. Cats are prone to heartworm; avoid feeding raw meat or fish.",
+          care_illness_2:
+            "Fractures: If limping or unable to walk, it's hard to distinguish sprains, fractures, or dislocations without vet examination. Minimize movement and transport to a clinic immediately.",
+          care_illness_3:
+            "Bleeding: Locate the wound, shave surrounding fur, and clean. For minor bleeding, rinse with water or 3% hydrogen peroxide, then bandage. For heavy bleeding, apply pressure and rush to the vet.",
+          care_vaccine_title: "💉 Vaccination Schedule",
+          care_vaccine_desc:
+            "Common vaccines include imported FVRCP (triple) and domestic panleukopenia vaccines. Only healthy cats should be vaccinated. Annual boosters are required regardless of indoor status. Skipping boosters after the initial series increases outbreak risk, as owners can carry viruses indoors. Avoid bathing for a week post-vaccination to prevent temperature stress or needle-site infection. Some immunocompromised cats may not develop adequate antibodies; monitor them closely.",
+          back_home: "← Back to Home",
+          footer_text: "© 2026 Cat Encyclopedia. All rights reserved.",
+        },
+      };
+
+      let currentLang = "zh";
+      const langBtn = document.getElementById("lang-btn");
+      langBtn.addEventListener("click", () => {
+        currentLang = currentLang === "zh" ? "en" : "zh";
+        langBtn.textContent = currentLang === "zh" ? "EN" : "中文";
+        document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+        updateLanguage();
+      });
+
+      function updateLanguage() {
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (translations[currentLang][key])
+            el.textContent = translations[currentLang][key];
+        });
+      }
+
+      // 下拉選單
+      const dropBtn = document.querySelector(".dropbtn");
+      const dropContent = document.querySelector(".dropdown-content");
+      dropBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropContent.classList.toggle("show");
+      });
+      document.addEventListener("click", () =>
+        dropContent.classList.remove("show")
+      );
+      dropContent.addEventListener("click", (e) => e.stopPropagation());
+    </script>
+    <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+    <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmp71xfde00degygxpsi72cha'></zapier-interfaces-chatbot-embed>
+  </body>
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>常見的貓 | Common Cats</title>
+    <style>
+      /* 🖼️ 品種圖片樣式 */
+      .breed-image {
+        margin: 2rem 0 0;
+        text-align: center;
+      }
+      .breed-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        display: block;
+        margin: 0 auto 0.8rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .breed-image img:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(9, 132, 227, 0.2);
+      }
+      .breed-image figcaption {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        font-weight: 500;
+      }
+      :root {
+        --bg: #ffffff;
+        --bg-alt: #f4f6f8;
+        --text: #2d3436;
+        --text-light: #636e72;
+        --primary: #0984e3;
+        --primary-hover: #0769b5;
+        --border: #dfe6e9;
+        --radius: 6px;
+        --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC",
+          sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font);
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.8;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        border-bottom: 2px solid var(--border);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+      }
+      .logo {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        margin: 0 2rem;
+        gap: 1rem;
+      }
+      .nav-left {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .nav-left a {
+        font-weight: 500;
+        padding: 0.5rem 0;
+        transition: color 0.2s;
+      }
+      .nav-left a:hover,
+      .nav-left a.active {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .nav-right {
+        margin-left: auto;
+      }
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropbtn {
+        background: none;
+        border: none;
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .dropbtn:hover {
+        background: var(--bg-alt);
+      }
+      .dropbtn::after {
+        content: "▼";
+        font-size: 0.6em;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: var(--bg);
+        min-width: 160px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-top: 0.5rem;
+        z-index: 101;
+      }
+      .dropdown-content.show {
+        display: block;
+      }
+      .dropdown-content a {
+        display: block;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+      }
+      .dropdown-content a:hover {
+        background: var(--bg-alt);
+        color: var(--primary);
+      }
+      .lang-toggle {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+      .lang-toggle:hover {
+        background: var(--primary-hover);
+      }
+
+      main {
+        padding-bottom: 4rem;
+      }
+      .content-section {
+        padding: 4rem 2rem;
+        max-width: 850px;
+        margin: 0 auto;
+      }
+      .content-section h1 {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--primary);
+      }
+      .content-section h2 {
+        font-size: 1.6rem;
+        margin: 3rem 0 1rem;
+        color: var(--text);
+      }
+      .content-section p {
+        color: var(--text-light);
+        margin-bottom: 1rem;
+        text-align: justify;
+      }
+
+      .breed-meta {
+        margin: 1.5rem 0 3rem;
+        padding: 1rem 1.5rem;
+        background: var(--bg-alt);
+        border-radius: var(--radius);
+        border-left: 4px solid var(--primary);
+      }
+      .breed-meta p {
+        margin: 0.4rem 0;
+        color: var(--text-light);
+        font-size: 0.95rem;
+      }
+      .breed-meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .breed-section {
+        scroll-margin-top: 100px;
+      } /* 錨點跳轉時避開固定導覽列 */
+
+      .back-link {
+        margin-top: 2rem;
+        text-align: center;
+      }
+      .back-link a {
+        color: var(--primary);
+        font-weight: 500;
+        transition: opacity 0.2s;
+      }
+      .back-link a:hover {
+        opacity: 0.8;
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem;
+        background: var(--bg-alt);
+        border-top: 2px solid var(--border);
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+      @media (max-width: 768px) {
+        header {
+          flex-wrap: wrap;
+        }
+        nav {
+          order: 3;
+          width: 100%;
+          margin: 1rem 0 0;
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: stretch;
+        }
+        .nav-left,
+        .nav-right {
+          width: 100%;
+          justify-content: center;
+          margin-left: 0;
+        }
+        .dropdown-content {
+          position: static;
+          border: none;
+          box-shadow: none;
+          background: var(--bg-alt);
+          margin-top: 0.5rem;
+        }
+        .content-section {
+          padding: 3rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="logo">🐱 貓咪百科 Cat Encyclopedia</a>
+      <nav>
+        <div class="nav-left">
+          <a href="index.html" data-i18n="nav_home">主頁</a>
+          <a href="index.html#what-is-cat" data-i18n="nav_what">什麼是貓</a>
+          <a href="care.html" data-i18n="nav_care">如何照顧</a>
+          <a href="index.html#family-tree" data-i18n="nav_tree">貓科動物族譜</a>
+          <a href="detector-standalone.html" data-i18n="nav_detector" style="color:var(--primary);font-weight:600">🔍 貓咪品種辨別器</a>
+</div>
+        </div>
+        <div class="nav-right">
+          <div class="dropdown">
+            <!-- ✅ 連結文字：點擊直接跳轉 breeds.html -->
+            <a href="breeds.html" class="nav-link" data-i18n="nav_common"
+              >常見的貓</a
+            >
+            <!-- ✅ 獨立箭頭按鈕：點擊展開/收起下拉選單 -->
+            <button class="drop-arrow" aria-label="展開選單">▼</button>
+            <div class="dropdown-content">
+              <a href="breeds.html#british-shorthair" data-i18n="common_1"
+                >英國短毛貓</a
+              >
+              <a href="breeds.html#ragdoll" data-i18n="common_2">布偶貓</a>
+              <a href="breeds.html#american-shorthair" data-i18n="common_3"
+                >美國短毛貓</a
+              >
+              <a href="breeds.html#birman" data-i18n="common_4">伯曼貓</a>
+              <a href="breeds.html#siamese" data-i18n="common_5">暹羅貓</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <button id="lang-btn" class="lang-toggle">EN</button>
+    </header>
+
+    <main>
+      <section id="common-cats" class="content-section">
+        <h1 data-i18n="common_title">常見的貓</h1>
+        <p data-i18n="common_desc">
+          以下是全球最常見的貓咪品種
+        </p>
+      </section>
+
+      <section id="british-shorthair" class="content-section breed-section">
+        <h2 data-i18n="breed1_title">英國短毛貓</h2>
+        <p data-i18n="breed1_desc">
+          英國短毛貓的祖先們可以說「戰功赫赫」,早在2000多年前的古羅馬帝國時期,牠們就曾跟隨凱撒大帝到處征戰。在戰爭中,牠們靠著超強的捕鼠能力,保護羅馬大軍的糧草不被老鼠偷吃,充分保障了軍需後方的穩定。從此,這些貓在人們心中得到了很高的地位。該品種貓體形短胖,但是非常英俊可愛,純色貓的需求量總是很大。
+        </p>
+        <div class="breed-meta">
+          <p>
+            <strong data-i18n="info_origin">原產國：</strong
+            ><span data-i18n="breed1_origin">英國</span>
+          </p>
+          <p>
+            <strong data-i18n="info_ancestor">祖先：</strong
+            ><span data-i18n="breed1_ancestor">非純種短毛貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_breed">品種：</strong
+            ><span data-i18n="breed1_name">英國短毛貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_time">起源時間：</strong
+            ><span data-i18n="breed1_time">20世紀80年代</span>
+          </p>
+        </div>
+        <figure class="breed-image">
+          <img
+            src="https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/British_Shorthair.jpg"
+            alt="英國短毛貓"
+            loading="lazy"
+          />
+          <figcaption data-i18n="breed1_name">英國短毛貓</figcaption>
+        </figure>
+      </section>
+
+      <section id="ragdoll" class="content-section breed-section">
+        <h2 data-i18n="breed2_title">布偶貓</h2>
+        <p data-i18n="breed2_desc">
+          又稱布娃娃貓、玩偶貓、布拉多爾貓,性格異常溫柔,缺乏自我保護能力,較適宜在室內飼養。牠們非常友善,能容忍孩子的嬉鬧;愛交際,甚至可以和狗友好相處,是理想的家庭寵物。牠們非常喜歡和人類在一起,喜歡有人陪伴,如果你工作繁忙,最好不要飼養此品種,不然牠們會很不快樂。
+        </p>
+        <div class="breed-meta">
+          <p>
+            <strong data-i18n="info_origin">原產國：</strong
+            ><span data-i18n="breed2_origin">美國</span>
+          </p>
+          <p>
+            <strong data-i18n="info_ancestor">祖先：</strong
+            ><span data-i18n="breed2_ancestor">白色長毛貓×伯曼貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_breed">品種：</strong
+            ><span data-i18n="breed2_name">布偶貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_time">起源時間：</strong
+            ><span data-i18n="breed2_time">20世紀60年代</span>
+          </p>
+        </div>
+        <figure class="breed-image">
+          <img
+            src="https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Ragdoll.jpg"
+            alt="布偶貓"
+            loading="lazy"
+          />
+          <figcaption data-i18n="breed2_name">布偶貓</figcaption>
+        </figure>
+      </section>
+
+      <section id="american-shorthair" class="content-section breed-section">
+        <h2 data-i18n="breed3_title">美國短毛貓</h2>
+        <p data-i18n="breed3_desc">
+          是原產於美國的一種貓,其祖先為歐洲早期移民帶到北美洲的貓種,與英國短毛貓和歐洲短毛貓同類。該品種的貓是在街頭巷尾收集來的貓當中選種,並和進口品種雜交培育而成。美國短毛貓素以體格魁偉、骨骼粗壯、肌肉發達、生性聰明和性格溫順而著稱,是短毛貓類中的大型品種。其被毛厚密,毛色多達30餘種,銀色條紋品種尤為名貴。
+        </p>
+        <div class="breed-meta">
+          <p>
+            <strong data-i18n="info_origin">原產國：</strong
+            ><span data-i18n="breed3_origin">美國</span>
+          </p>
+          <p>
+            <strong data-i18n="info_ancestor">祖先：</strong
+            ><span data-i18n="breed3_ancestor">非純種短毛貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_breed">品種：</strong
+            ><span data-i18n="breed3_name">美國短毛貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_time">起源時間：</strong
+            ><span data-i18n="breed3_time">17世紀</span>
+          </p>
+        </div>
+        <figure class="breed-image">
+          <img
+            src="https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/American_Shorthair.jpg"
+            alt="美國短毛貓"
+            loading="lazy"
+          />
+          <figcaption data-i18n="breed3_name">美國短毛貓</figcaption>
+        </figure>
+      </section>
+
+      <section id="birman" class="content-section breed-section">
+        <h2 data-i18n="breed4_title">伯曼貓</h2>
+        <p data-i18n="breed4_desc">
+          伯曼貓傳說最早是由古代緬甸寺廟裏的僧侶所飼養,被視為護殿神貓。事實上,伯曼貓於18世紀傳入歐洲,最早在法國被確定為固定品種,緊接着在英國也註冊了。伯曼貓屬中大型貓,體形較長,肌肉結實,四肢中等長度,腳爪大而圓,
+          被毛長而幼細。牠們個性溫和,非常友善,叫聲悦耳,喜歡與人為伴,對其他貓也十分友好。
+        </p>
+        <div class="breed-meta">
+          <p>
+            <strong data-i18n="info_origin">原產國：</strong
+            ><span data-i18n="breed4_origin">緬甸</span>
+          </p>
+          <p>
+            <strong data-i18n="info_ancestor">祖先：</strong
+            ><span data-i18n="breed4_ancestor">非純種貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_breed">品種：</strong
+            ><span data-i18n="breed4_name">伯曼貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_time">起源時間：</strong
+            ><span data-i18n="breed4_time">不詳</span>
+          </p>
+        </div>
+        <figure class="breed-image">
+          <img
+            src="https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Birman.jpg"
+            alt="伯曼貓"
+            loading="lazy"
+          />
+          <figcaption data-i18n="breed4_name">伯曼貓</figcaption>
+        </figure>
+      </section>
+
+      <section id="siamese" class="content-section breed-section">
+        <h2 data-i18n="breed5_title">暹羅貓</h2>
+        <p data-i18n="breed5_desc">
+          又稱泰國貓,最早被飼養在泰國皇室和大寺院中,曾一度是鮮為人知的宮廷「秘寶」。牠們有着流線型的修長身材,四肢、軀幹、頸部和尾巴均細長且比例均衡。
+          暹羅貓生性活潑好動,聰明伶俐,動作敏捷,氣質高雅,相貌不凡。19世紀末,
+          牠們被作為外交禮物由泰國皇家國會送給英國和美國,引起公眾的興趣。
+        </p>
+        <div class="breed-meta">
+          <p>
+            <strong data-i18n="info_origin">原產國：</strong
+            ><span data-i18n="breed5_origin">泰國</span>
+          </p>
+          <p>
+            <strong data-i18n="info_ancestor">祖先：</strong
+            ><span data-i18n="breed5_ancestor">非純種短毛貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_breed">品種：</strong
+            ><span data-i18n="breed5_name">暹羅貓</span>
+          </p>
+          <p>
+            <strong data-i18n="info_time">起源時間：</strong
+            ><span data-i18n="breed5_time">14世紀</span>
+          </p>
+        </div>
+        <figure class="breed-image">
+          <img
+            src="https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Siamese.jpg"
+            alt="暹羅貓"
+            loading="lazy"
+          />
+          <figcaption data-i18n="breed5_name">暹羅貓</figcaption>
+        </figure>
+      </section>
+
+      <div class="back-link">
+        <a href="index.html" data-i18n="back_home">← 返回主頁</a>
+      </div>
+    </main>
+
+    <footer>
+      <p data-i18n="footer_text">© 2026 貓咪百科. 保留所有權利.</p>
+    </footer>
+
+    <script>
+      const translations = {
+        zh: {
+          nav_home: "主頁",
+          nav_what: "什麼是貓",
+          nav_care: "如何照顧",
+          nav_tree: "貓科動物族譜",
+          nav_detector: "🔍 貓咪品種辨別器",
+          nav_common: "常見的貓",
+          common_1: "英國短毛貓",
+          common_2: "布偶貓",
+          common_3: "美國短毛貓",
+          common_4: "伯曼貓",
+          common_5: "暹羅貓",
+          common_title: "常見的貓",
+          common_desc:
+            "以下是全球最常見的貓咪品種。請從上方選單或下方列表瀏覽詳細介紹。",
+          info_origin: "原產國：",
+          info_ancestor: "祖先：",
+          info_breed: "品種：",
+          info_time: "起源時間：",
+          breed1_title: "英國短毛貓",
+          breed1_desc:
+            "英國短毛貓的祖先們可以說「戰功赫赫」,早在2000多年前的古羅馬帝國時期,牠們就曾跟隨凱撒大帝到處征戰。在戰爭中,牠們靠著超強的捕鼠能力,保護羅馬大軍的糧草不被老鼠偷吃,充分保障了軍需後方的穩定。從此,這些貓在人們心中得到了很高的地位。該品種貓體形短胖,但是非常英俊可愛,純色貓的需求量總是很大。",
+          breed1_origin: "英國",
+          breed1_ancestor: "非純種短毛貓",
+          breed1_name: "英國短毛貓",
+          breed1_time: "20世紀80年代",
+          breed2_title: "布偶貓",
+          breed2_desc:
+            "又稱布娃娃貓、玩偶貓、布拉多爾貓,性格異常溫柔,缺乏自我保護能力,較適宜在室內飼養。牠們非常友善,能容忍孩子的嬉鬧;愛交際,甚至可以和狗友好相處,是理想的家庭寵物。牠們非常喜歡和人類在一起,喜歡有人陪伴,如果你工作繁忙,最好不要飼養此品種,不然牠們會很不快樂。",
+          breed2_origin: "美國",
+          breed2_ancestor: "白色長毛貓×伯曼貓",
+          breed2_name: "布偶貓",
+          breed2_time: "20世紀60年代",
+          breed3_title: "美國短毛貓",
+          breed3_desc:
+            "是原產於美國的一種貓,其祖先為歐洲早期移民帶到北美洲的貓種,與英國短毛貓和歐洲短毛貓同類。該品種的貓是在街頭巷尾收集來的貓當中選種,並和進口品種雜交培育而成。美國短毛貓素以體格魁偉、骨骼粗壯、肌肉發達、生性聰明和性格溫順而著稱,是短毛貓類中的大型品種。其被毛厚密,毛色多達30餘種,銀色條紋品種尤為名貴。",
+          breed3_origin: "美國",
+          breed3_ancestor: "非純種短毛貓",
+          breed3_name: "美國短毛貓",
+          breed3_time: "17世紀",
+          breed4_title: "伯曼貓",
+          breed4_desc:
+            "伯曼貓傳說最早是由古代緬甸寺廟裏的僧侶所飼養,被視為護殿神貓。事實上,伯曼貓於18世紀傳入歐洲,最早在法國被確定為固定品種,緊接着在英國也註冊了。伯曼貓屬中大型貓,體形較長,肌肉結實,四肢中等長度,腳爪大而圓, 被毛長而幼細。牠們個性溫和,非常友善,叫聲悦耳,喜歡與人為伴,對其他貓也十分友好。",
+          breed4_origin: "緬甸",
+          breed4_ancestor: "非純種貓",
+          breed4_name: "伯曼貓",
+          breed4_time: "不詳",
+          breed5_title: "暹羅貓",
+          breed5_desc:
+            "又稱泰國貓,最早被飼養在泰國皇室和大寺院中,曾一度是鮮為人知的宮廷「秘寶」。牠們有着流線型的修長身材,四肢、軀幹、頸部和尾巴均細長且比例均衡。 暹羅貓生性活潑好動,聰明伶俐,動作敏捷,氣質高雅,相貌不凡。19世紀末, 牠們被作為外交禮物由泰國皇家國會送給英國和美國,引起公眾的興趣。",
+          breed5_origin: "泰國",
+          breed5_ancestor: "非純種短毛貓",
+          breed5_name: "暹羅貓",
+          breed5_time: "14世紀",
+          back_home: "← 返回主頁",
+          footer_text: "© 2026 貓咪百科. 保留所有權利.",
+        },
+        en: {
+          nav_home: "Home",
+          nav_what: "What is a Cat?",
+          nav_care: "How to Care",
+          nav_tree: "Cat Family Tree",
+          nav_detector: "🔍 Cat Breed Detector",
+          nav_common: "Common Cats",
+          common_1: "British Shorthair",
+          common_2: "Ragdoll",
+          common_3: "American Shorthair",
+          common_4: "Birman",
+          common_5: "Siamese",
+          common_title: "Common Cats",
+          common_desc:
+            "Here are some of the most common cat breeds worldwide.",
+          info_origin: "Origin: ",
+          info_ancestor: "Ancestry: ",
+          info_breed: "Breed: ",
+          info_time: "Origin Era: ",
+          breed1_title: "British Shorthair",
+          breed1_desc:
+            "The ancestors of the British Shorthair boast a legendary history. Over 2,000 years ago during the Roman Empire, they accompanied Julius Caesar on his campaigns. With exceptional mousing skills, they protected the army's grain supplies from rodents, ensuring logistical stability. This earned them high regard among people. Today, the breed is known for its sturdy, compact build and charming, handsome appearance. Solid-colored variants remain highly sought after.",
+          breed1_origin: "United Kingdom",
+          breed1_ancestor: "Non-pedigree shorthair cats",
+          breed1_name: "British Shorthair",
+          breed1_time: "1980s",
+          breed2_title: "Ragdoll",
+          breed2_desc:
+            "Also known as the 'doll cat' or 'ragdoll,' this breed is exceptionally gentle and lacks strong self-defense instincts, making it best suited for indoor living. They are incredibly friendly, tolerant of children's play, highly sociable, and can even get along well with dogs, making them ideal family pets. Ragdolls thrive on human companionship. If you have a busy schedule and are away frequently, this breed may become unhappy and is not recommended.",
+          breed2_origin: "United States",
+          breed2_ancestor: "White longhair × Birman",
+          breed2_name: "Ragdoll",
+          breed2_time: "1960s",
+          breed3_title: "American Shorthair",
+          breed3_desc:
+            "Originating in the United States, its ancestors were brought to North America by early European immigrants, sharing lineage with British and European Shorthairs. The breed was developed by selectively breeding street cats with imported varieties. American Shorthairs are renowned for their robust build, heavy bone structure, muscular physique, intelligence, and docile temperament, making them one of the largest shorthair breeds. They have a thick, dense coat with over 30 color patterns; the silver tabby is particularly prized.",
+          breed3_origin: "United States",
+          breed3_ancestor: "Non-pedigree shorthair cats",
+          breed3_name: "American Shorthair",
+          breed3_time: "17th Century",
+          breed4_title: "Birman",
+          breed4_desc:
+            "Legend says the Birman was originally bred by monks in ancient Burmese temples and revered as a sacred temple guardian. Historically, they were introduced to Europe in the 18th century, first standardized in France, and later registered in the UK. Birmans are medium-to-large cats with a long, muscular body, medium-length legs, large round paws, and a long, silky coat. They have a gentle, friendly personality, a soft voice, enjoy human company, and get along well with other cats.",
+          breed4_origin: "Myanmar (Burma)",
+          breed4_ancestor: "Non-pedigree cats",
+          breed4_name: "Birman",
+          breed4_time: "Unknown",
+          breed5_title: "Siamese",
+          breed5_desc:
+            "Also known as the Thai cat, it was originally kept in Thai royal palaces and major temples, once considered a closely guarded royal 'treasure.' They feature a sleek, elongated body with slender, well-proportioned legs, torso, neck, and tail. Siamese cats are naturally active, highly intelligent, agile, elegant, and strikingly distinctive. In the late 19th century, they were gifted as diplomatic presents by the Thai royal court to Britain and the United States, sparking widespread public fascination.",
+          breed5_origin: "Thailand",
+          breed5_ancestor: "Non-pedigree shorthair cats",
+          breed5_name: "Siamese",
+          breed5_time: "14th Century",
+          back_home: "← Back to Home",
+          footer_text: "© 2026 Cat Encyclopedia. All rights reserved.",
+        },
+      };
+
+      let currentLang = "zh";
+      const langBtn = document.getElementById("lang-btn");
+      if (langBtn) {
+        langBtn.addEventListener("click", () => {
+          currentLang = currentLang === "zh" ? "en" : "zh";
+          langBtn.textContent = currentLang === "zh" ? "EN" : "中文";
+          document.documentElement.lang =
+            currentLang === "zh" ? "zh-Hant" : "en";
+          updateLanguage();
+        });
+      }
+
+      function updateLanguage() {
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (translations[currentLang][key])
+            el.textContent = translations[currentLang][key];
+        });
+      }
+
+      // 🔽 下拉選單控制（✅ 關鍵修正區）
+      const dropArrow = document.querySelector(".drop-arrow");
+      const dropContent = document.querySelector(".dropdown-content");
+
+      if (dropArrow && dropContent) {
+        // 1. 點擊箭頭：切換顯示/隱藏
+        dropArrow.addEventListener("click", (e) => {
+          e.stopPropagation(); // 阻止事件冒泡，避免被下方 document 監聽器關閉
+          dropContent.classList.toggle("show");
+        });
+
+        // 2. 點擊頁面空白處：關閉選單
+        document.addEventListener("click", () => {
+          dropContent.classList.remove("show");
+        });
+
+        // 3. 點擊選單內部：保持開啟
+        dropContent.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+      }
+    </script>
+    <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+    <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmp71xfde00degygxpsi72cha'></zapier-interfaces-chatbot-embed>
+  </body>
+</html>

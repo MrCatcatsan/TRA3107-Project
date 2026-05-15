@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>貓咪百科 | Cat Encyclopedia</title>
+    <style>
+      /* 🎨 平面化設計變數 */
+      :root {
+        --bg: #ffffff;
+        --bg-alt: #f4f6f8;
+        --text: #2d3436;
+        --text-light: #636e72;
+        --primary: #0984e3;
+        --primary-hover: #0769b5;
+        --border: #dfe6e9;
+        --radius: 6px;
+        --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC",
+          sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font);
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.6;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+
+      /* 🔝 導覽列 */
+      header {
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        border-bottom: 2px solid var(--border);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+      }
+      .logo {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        margin: 0 2rem;
+        gap: 1rem;
+      }
+      .nav-left {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .nav-left a {
+        font-weight: 500;
+        padding: 0.5rem 0;
+        position: relative;
+        transition: color 0.2s;
+      }
+      .nav-left a:hover {
+        color: var(--primary);
+      }
+
+      /* 靠右分隔 */
+      .nav-right {
+        margin-left: auto;
+      }
+
+      /* 🔽 更新版下拉選單樣式（替換舊版） */
+      .dropdown {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+      }
+      .nav-link {
+        font-weight: 500;
+        padding: 0.5rem 0;
+        margin-right: 4px;
+        transition: color 0.2s;
+      }
+      .nav-link:hover {
+        color: var(--primary);
+      }
+      .drop-arrow {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.65em;
+        color: var(--text-light);
+        transition: all 0.2s;
+        border-radius: var(--radius);
+      }
+      .drop-arrow:hover {
+        color: var(--primary);
+        background: var(--bg-alt);
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: var(--bg);
+        min-width: 160px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-top: 0.5rem;
+        z-index: 101;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      .dropdown-content.show {
+        display: block;
+      }
+      .dropdown-content a {
+        display: block;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+      }
+      .dropdown-content a:hover {
+        background: var(--bg-alt);
+        color: var(--primary);
+      }
+
+      .lang-toggle {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+      .lang-toggle:hover {
+        background: var(--primary-hover);
+      }
+
+      /* 📄 內容區塊 */
+      main {
+        padding-bottom: 4rem;
+      }
+      .content-section {
+        padding: 4rem 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .content-section:nth-child(even) {
+  background: var(--bg-alt);
+}
+      .content-section h1,
+      .content-section h2 {
+        margin-bottom: 1rem;
+      }
+      .content-section p {
+        color: var(--text-light);
+        max-width: 750px;
+      }
+
+      /* 🌳 樹狀圖專用 CSS（新增） */
+      .tree-container {
+        overflow-x: auto;
+        padding: 2rem 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--bg-alt);
+      }
+      .tree {
+        white-space: nowrap;
+        min-width: fit-content;
+        margin: 0;
+        padding: 0;
+      }
+      .tree ul {
+        padding-top: 20px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+      }
+      .tree li {
+        float: left;
+        text-align: center;
+        list-style-type: none;
+        position: relative;
+        padding: 20px 8px 0 8px;
+      }
+      .tree li::before,
+      .tree li::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 50%;
+        border-top: 2px solid var(--border);
+        width: 50%;
+        height: 20px;
+      }
+      .tree li::after {
+        right: auto;
+        left: 50%;
+        border-left: 2px solid var(--border);
+      }
+      .tree li:only-child::after,
+      .tree li:only-child::before {
+        display: none;
+      }
+      .tree li:only-child {
+        padding-top: 0;
+      }
+      .tree li:first-child::before,
+      .tree li:last-child::after {
+        border: 0 none;
+      }
+      .tree li:last-child::before {
+        border-right: 2px solid var(--border);
+        border-radius: 0 5px 0 0;
+      }
+      .tree li:first-child::after {
+        border-radius: 5px 0 0 0;
+      }
+      .tree ul ul::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-left: 2px solid var(--border);
+        width: 0;
+        height: 20px;
+      }
+      .tree .node {
+        display: inline-block;
+        padding: 0.5rem 0.9rem;
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--bg);
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        cursor: default;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .tree .node:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(37, 99, 235, 0.15);
+      }
+
+      /* 🦶 頁尾 */
+      footer {
+        text-align: center;
+        padding: 2rem;
+        background: var(--bg-alt);
+        border-top: 2px solid var(--border);
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+
+      /* 📱 響應式 */
+      @media (max-width: 768px) {
+        header {
+          flex-wrap: wrap;
+        }
+        nav {
+          order: 3;
+          width: 100%;
+          margin: 1rem 0 0;
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: stretch;
+        }
+        .nav-left,
+        .nav-right {
+          width: 100%;
+          justify-content: center;
+          margin-left: 0;
+        }
+        .dropdown-content {
+          position: static;
+          border: none;
+          box-shadow: none;
+          background: var(--bg-alt);
+          margin-top: 0.5rem;
+        }
+        .content-section {
+          padding: 3rem 1.5rem;
+        }
+      }
+      /* 🖼️ 圖片彈窗樣式 */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+      .modal-overlay.active {
+        display: flex;
+        animation: fadeIn 0.2s ease;
+      }
+      .modal-content {
+        background: var(--bg);
+        border-radius: var(--radius);
+        padding: 2rem;
+        max-width: 520px;
+        width: 100%;
+        position: relative;
+        text-align: center;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        border: 1px solid var(--border);
+      }
+      .modal-close {
+        position: absolute;
+        top: 0.8rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: var(--text-light);
+        line-height: 1;
+        transition: color 0.2s;
+        padding: 0 4px;
+      }
+      .modal-close:hover {
+        color: var(--text);
+      }
+      .modal-content h3 {
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+      }
+      .modal-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--radius);
+        display: block;
+        margin: 0 auto;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* 🐱 常見貓咪區塊樣式 */
+      .breed-meta {
+        margin-top: 1.5rem;
+        padding: 1rem 1.5rem;
+        background: var(--bg-alt);
+        border-radius: var(--radius);
+        border-left: 3px solid var(--primary);
+      }
+      .breed-meta p {
+        margin: 0.4rem 0;
+        color: var(--text-light);
+        font-size: 0.95rem;
+      }
+      .breed-meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .breed-section {
+        margin-bottom: 4rem;
+      }
+    </style>
+  </head>
+  <!-- 🖼️ 貓咪照片彈窗 -->
+  <div id="cat-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="關閉">&times;</button>
+      <h3 id="modal-title">貓咪名稱</h3>
+      <img id="modal-img" src="" alt="貓咪照片" />
+    </div>
+  </div>
+
+  <body>
+    <header>
+      <div class="logo">🐱 貓咪百科 Cat Encyclopedia</div>
+      <nav>
+        <div class="nav-left">
+          <a href="index.html" data-i18n="nav_home">主頁</a>
+          <a href="index.html#what-is-cat" data-i18n="nav_what">什麼是貓</a>
+          <a href="care.html" data-i18n="nav_care">如何照顧</a>
+          <a href="index.html#family-tree" data-i18n="nav_tree">貓科動物族譜</a>
+          <a href="detector-standalone.html" data-i18n="nav_detector" style="color:var(--primary);font-weight:600">🔍 貓咪品種辨別器</a>
+</div>
+        </div>
+        <div class="nav-right">
+          <div class="dropdown">
+            <!-- ✅ 連結文字：點擊直接跳轉 breeds.html -->
+            <a href="breeds.html" class="nav-link" data-i18n="nav_common"
+              >常見的貓</a
+            >
+            <!-- ✅ 獨立箭頭按鈕：點擊展開/收起下拉選單 -->
+            <button class="drop-arrow" aria-label="展開選單">▼</button>
+            <div class="dropdown-content">
+              <a href="breeds.html#british-shorthair" data-i18n="common_1"
+                >英國短毛貓</a
+              >
+              <a href="breeds.html#ragdoll" data-i18n="common_2">布偶貓</a>
+              <a href="breeds.html#american-shorthair" data-i18n="common_3"
+                >美國短毛貓</a
+              >
+              <a href="breeds.html#birman" data-i18n="common_4">伯曼貓</a>
+              <a href="breeds.html#siamese" data-i18n="common_5">暹羅貓</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <button id="lang-btn" class="lang-toggle">EN</button>
+    </header>
+
+    <main>
+      <section id="home" class="content-section">
+        <h1 data-i18n="home_title">歡迎來到貓咪的世界</h1>
+        <p data-i18n="home_desc">
+          探索貓科動物的奧秘，學習如何與這些可愛的毛茸茸朋友相處。
+        </p>
+      </section>
+
+      <section id="what-is-cat" class="content-section">
+        <h2 data-i18n="what_title">什麼是貓？</h2>
+        <p data-i18n="what_desc">
+          貓（學名：Felis
+          catus）是一種小型貓科哺乳動物，也是人類最早馴化的動物之一。我們通常所說的家貓，不管是什麼品種，不管牠們的外貌差異有多明顯，人們總能在第一時間就判斷出這是一隻貓。究其原因，拋開體態、頭型、被毛長度等這些具體形態差異，所有家貓都具有一些共性，不僅僅是指骨骼結構、身體器官分佈上的共性，還包括性格特徵、生活習性上的共性。愛運動、擅捕獵、優雅、孤傲、任性、貪睡幾乎是所有家貓的共性。
+        </p>
+      </section>
+
+      <section id="family-tree" class="content-section">
+        <h2 data-i18n="tree_title">貓科動物族譜</h2>
+        <div class="tree-container">
+          <ul class="tree">
+            <li>
+              <span class="node" data-i18n="tree_root">貓科動物 (Felidae)</span>
+              <ul>
+                <!-- 豹亞科 -->
+                <li>
+                  <span class="node" data-i18n="tree_pantherinae"
+                    >豹亞科 (Pantherinae)</span
+                  >
+                  <ul>
+                    <li>
+                      <span class="node" data-i18n="tree_pantherini"
+                        >豹族（世系1）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_neofelis"
+                            >雲豹屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_neofelis_clouded"
+                                >雲豹</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_neofelis_sunda"
+                                >巽他雲豹</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <span class="node" data-i18n="tree_panthera"
+                            >豹屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span class="node" data-i18n="tree_panthera_lion"
+                                >獅</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_panthera_jaguar"
+                                >美洲豹</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_panthera_leopard"
+                                >豹</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_panthera_tiger"
+                                >虎</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_panthera_snow"
+                                >雪豹</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <!-- 貓亞科 -->
+                <li>
+                  <span class="node" data-i18n="tree_felinae"
+                    >貓亞科 (Felinae)</span
+                  >
+                  <ul>
+                    <li>
+                      <span class="node" data-i18n="tree_clade2"
+                        >金貓族（世系2）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_pardofelis"
+                            >紋貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_pardofelis_marbled"
+                                >紋貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <span class="node" data-i18n="tree_catopuma_genus"
+                            >金貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span class="node" data-i18n="tree_catopuma_bay"
+                                >婆羅洲金貓</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_catopuma_asian"
+                                >金貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="node" data-i18n="tree_clade3"
+                        >獰貓族（世系3）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_leptailurus"
+                            >藪貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leptailurus_serval"
+                                >藪貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <span class="node" data-i18n="tree_caracal_genus"
+                            >獰貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_caracal_caracal"
+                                >獰貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <span class="node" data-i18n="tree_profelis"
+                            >非洲金貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_profelis_african"
+                                >非洲金貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="node" data-i18n="tree_clade4"
+                        >虎貓族（世系4）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_leopardus_genus"
+                            >虎貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_ocelot"
+                                >虎貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_oncilla"
+                                >小斑虎貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_margay"
+                                >長尾虎貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_andean"
+                                >山原貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_pantanal"
+                                >南美濕地貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_pampas"
+                                >南美草原貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_Kodkod"
+                                >南美林貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_leopardus_geoffroy"
+                                >喬氏貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="node" data-i18n="tree_clade5"
+                        >猞猁族（世系5）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_lynx_genus"
+                            >猞猁屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span class="node" data-i18n="tree_lynx_canada"
+                                >加拿大猞猁</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_lynx_eurasian"
+                                >歐亞猞猁</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_lynx_iberian"
+                                >西班牙猞猁</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_lynx_bobcat"
+                                >短尾貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="node" data-i18n="tree_clade6"
+                        >美洲獅族（世系6）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_puma_genus"
+                            >美洲金貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span class="node" data-i18n="tree_puma_cougar"
+                                >美洲獅</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_puma_jaguarundi"
+                                >細腰貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <span class="node" data-i18n="tree_acinonyx"
+                            >獵豹屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_acinonyx_cheetah"
+                                >獵豹</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="node" data-i18n="tree_clade7"
+                        >豹貓族（世系7）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_prionailurus_genus"
+                            >豹貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_prionailurus_leopard"
+                                >豹貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_prionailurus_iriomote"
+                                >西表山貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_prionailurus_flat"
+                                >扁頭貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_prionailurus_rusty"
+                                >銹斑貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_prionailurus_fishing"
+                                >漁貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <span class="node" data-i18n="tree_otocolobus"
+                            >兔猻屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_otocolobus_pallas"
+                                >兔猻</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="node" data-i18n="tree_clade8"
+                        >貓族（世系8）</span
+                      >
+                      <ul>
+                        <li>
+                          <span class="node" data-i18n="tree_felis_genus"
+                            >貓屬</span
+                          >
+                          <ul>
+                            <li>
+                              <span class="node" data-i18n="tree_felis_domestic"
+                                >家貓</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_felis_wildcat"
+                                >斑貓</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_felis_chinese"
+                                >荒漠貓</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_felis_sand"
+                                >沙貓</span
+                              >
+                            </li>
+                            <li>
+                              <span
+                                class="node"
+                                data-i18n="tree_felis_blackfoot"
+                                >黑足貓</span
+                              >
+                            </li>
+                            <li>
+                              <span class="node" data-i18n="tree_felis_jungle"
+                                >叢林貓</span
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p data-i18n="footer_text">© 2026 貓咪百科. 保留所有權利.</p>
+    </footer>
+
+    <script>
+      // 🌍 雙語字典
+      const translations = {
+  zh: {
+    nav_home: "主頁", nav_what: "什麼是貓", nav_care: "如何照顧", nav_tree: "貓科動物族譜", nav_common: "常見的貓", nav_detector: "🔍 貓咪品種辨別器",
+    common_1: "英國短毛貓", common_2: "布偶貓", common_3: "美國短毛貓", common_4: "伯曼貓", common_5: "暹羅貓",
+    home_title: "歡迎來到貓咪的世界", home_desc: "探索貓科動物的奧秘，學習如何與這些可愛的毛茸茸朋友相處。",
+    what_title: "什麼是貓？", what_desc: "貓（學名：Felis catus）是一種小型貓科哺乳動物，也是人類最早馴化的動物之一。我們通常所說的家貓，不管是什麼品種，不管牠們的外貌差異有多明顯，人們總能在第一時間就判斷出這是一隻貓。究其原因，拋開體態、頭型、被毛長度等這些具體形態差異，所有家貓都具有一些共性，不僅僅是指骨骼結構、身體器官分佈上的共性，還包括性格特徵、生活習性上的共性。愛運動、擅捕獵、優雅、孤傲、任性、貪睡幾乎是所有家貓的共性。",
+    tree_title: "貓科動物族譜",
+    tree_root: "貓科動物 (Felidae)", tree_pantherinae: "豹亞科 (Pantherinae)", tree_pantherini: "豹族（世系1）",
+    tree_neofelis: "雲豹屬", tree_neofelis_clouded: "雲豹", tree_neofelis_sunda: "巽他雲豹",
+    tree_panthera: "豹屬", tree_panthera_lion: "獅", tree_panthera_jaguar: "美洲豹", tree_panthera_leopard: "豹", tree_panthera_tiger: "虎", tree_panthera_snow: "雪豹",
+    tree_felinae: "貓亞科 (Felinae)",
+    tree_clade2: "金貓族（世系2）", tree_pardofelis: "紋貓屬", tree_pardofelis_marbled: "紋貓", tree_catopuma_genus: "金貓屬", tree_catopuma_bay: "婆羅洲金貓", tree_catopuma_asian: "金貓",
+    tree_clade3: "獰貓族（世系3）", tree_leptailurus: "藪貓屬", tree_leptailurus_serval: "藪貓", tree_caracal_genus: "獰貓屬", tree_caracal_caracal: "獰貓", tree_profelis: "非洲金貓屬", tree_profelis_african: "非洲金貓",
+    tree_clade4: "虎貓族（世系4）", tree_leopardus_genus: "虎貓屬", tree_leopardus_ocelot: "虎貓", tree_leopardus_margay: "小斑虎貓", tree_leopardus_oncilla: "長尾虎貓", tree_leopardus_andean: "山原貓", tree_leopardus_pantanal: "南美濕地貓", tree_leopardus_pampas: "南美草原貓", tree_leopardus_Kodkod: "南美林貓", tree_leopardus_geoffroy: "喬氏貓",
+    tree_clade5: "猞猁族（世系5）", tree_lynx_genus: "猞猁屬", tree_lynx_canada: "加拿大猞猁", tree_lynx_eurasian: "歐亞猞猁", tree_lynx_iberian: "西班牙猞猁", tree_lynx_bobcat: "短尾貓",
+    tree_clade6: "美洲獅族（世系6）", tree_puma_genus: "美洲金貓屬", tree_puma_cougar: "美洲獅", tree_puma_jaguarundi: "細腰貓", tree_acinonyx: "獵豹屬", tree_acinonyx_cheetah: "獵豹",
+    tree_clade7: "豹貓族（世系7）", tree_prionailurus_genus: "豹貓屬", tree_prionailurus_leopard: "豹貓", tree_prionailurus_iriomote: "西表山貓", tree_prionailurus_flat: "扁頭貓", tree_prionailurus_rusty: "銹斑貓", tree_prionailurus_fishing: "漁貓", tree_otocolobus: "兔猻屬", tree_otocolobus_pallas: "兔猻",
+    tree_clade8: "貓族（世系8）", tree_felis_genus: "貓屬", tree_felis_domestic: "家貓", tree_felis_wildcat: "斑貓", tree_felis_chinese: "荒漠貓", tree_felis_sand: "沙貓", tree_felis_blackfoot: "黑足貓", tree_felis_jungle: "叢林貓",
+    footer_text: "© 2026 貓咪百科. 保留所有權利."
+  },
+  en: {
+    nav_home: "Home", nav_what: "What is a Cat?", nav_care: "How to Care", nav_tree: "Cat Family Tree", nav_common: "Common Cats", nav_detector: "🔍 Cat Breed Detector",
+    common_1: "British Shorthair", common_2: "Ragdoll", common_3: "American Shorthair", common_4: "Birman", common_5: "Siamese",
+    home_title: "Welcome to the World of Cats", home_desc: "Explore the mysteries of felines and learn how to bond with these adorable furry friends.",
+    what_title: "What is a Cat?", what_desc: "The cat (Felis catus) is a small domesticated feline mammal and one of the first animals to be domesticated by humans. Regardless of breed or physical variation, people instantly recognize a cat. Beyond skeletal structure or coat length, all domestic cats share fundamental traits in anatomy, organ layout, personality, and habits. Athleticism, hunting prowess, elegance, aloofness, independence, and love for sleep are nearly universal feline characteristics.",
+    tree_title: "Cat Family Tree",
+    tree_root: "Felidae (Cat Family)", tree_pantherinae: "Pantherinae", tree_pantherini: "Pantherini (Lineage 1)",
+    tree_neofelis: "Neofelis", tree_neofelis_clouded: "Clouded Leopard", tree_neofelis_sunda: "Sunda Clouded Leopard",
+    tree_panthera: "Panthera", tree_panthera_lion: "Lion", tree_panthera_jaguar: "Jaguar", tree_panthera_leopard: "Leopard", tree_panthera_tiger: "Tiger", tree_panthera_snow: "Snow Leopard",
+    tree_felinae: "Felinae",
+    tree_clade2: "Catopuma Clade (Lineage 2)", tree_pardofelis: "Pardofelis", tree_pardofelis_marbled: "Marbled Cat", tree_catopuma_genus: "Catopuma", tree_catopuma_bay: "Bay Cat", tree_catopuma_asian: "Asian Golden Cat",
+    tree_clade3: "Caracal Clade (Lineage 3)", tree_leptailurus: "Leptailurus", tree_leptailurus_serval: "Serval", tree_caracal_genus: "Caracal", tree_caracal_caracal: "Caracal", tree_profelis: "Profelis", tree_profelis_african: "African Golden Cat",
+    tree_clade4: "Leopardus Clade (Lineage 4)", tree_leopardus_genus: "Leopardus", tree_leopardus_ocelot: "Ocelot", tree_leopardus_margay: "Margay", tree_leopardus_oncilla: "Oncilla", tree_leopardus_andean: "Andean Mountain Cat", tree_leopardus_pantanal: "Pantanal Cat", tree_leopardus_pampas: "Pampas Cat", tree_leopardus_Kodkod: "Kodkod", tree_leopardus_geoffroy: "Geoffroy's Cat",
+    tree_clade5: "Lynx Clade (Lineage 5)", tree_lynx_genus: "Lynx", tree_lynx_canada: "Canada Lynx", tree_lynx_eurasian: "Eurasian Lynx", tree_lynx_iberian: "Iberian Lynx", tree_lynx_bobcat: "Bobcat",
+    tree_clade6: "Puma Clade (Lineage 6)", tree_puma_genus: "Puma", tree_puma_cougar: "Cougar", tree_puma_jaguarundi: "Jaguarundi", tree_acinonyx: "Acinonyx", tree_acinonyx_cheetah: "Cheetah",
+    tree_clade7: "Prionailurus Clade (Lineage 7)", tree_prionailurus_genus: "Prionailurus", tree_prionailurus_leopard: "Leopard Cat", tree_prionailurus_iriomote: "Iriomote Cat", tree_prionailurus_flat: "Flat-headed Cat", tree_prionailurus_rusty: "Rusty-spotted Cat", tree_prionailurus_fishing: "Fishing Cat", tree_otocolobus: "Otocolobus", tree_otocolobus_pallas: "Pallas's Cat",
+    tree_clade8: "Felis Clade (Lineage 8)", tree_felis_genus: "Felis", tree_felis_domestic: "Domestic Cat", tree_felis_wildcat: "Wildcat", tree_felis_chinese: "Chinese Mountain Cat", tree_felis_sand: "Sand Cat", tree_felis_blackfoot: "Black-footed Cat", tree_felis_jungle: "Jungle Cat",
+    footer_text: "© 2026 Cat Encyclopedia. All rights reserved."
+  }
+};
+
+      let currentLang = "zh";
+      const langBtn = document.getElementById("lang-btn");
+
+      // 語言切換
+      langBtn.addEventListener("click", () => {
+        currentLang = currentLang === "zh" ? "en" : "zh";
+        langBtn.textContent = currentLang === "zh" ? "EN" : "中文";
+        document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+        updateLanguage();
+      });
+
+      function updateLanguage() {
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (translations[currentLang][key])
+            el.textContent = translations[currentLang][key];
+        });
+      }
+
+      // 下拉選單控制
+      const dropBtn = document.querySelector(".drop-arrow");
+      const dropContent = document.querySelector(".dropdown-content");
+
+      dropBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropContent.classList.toggle("show");
+      });
+
+      document.addEventListener("click", () =>
+        dropContent.classList.remove("show")
+      );
+      dropContent.addEventListener("click", (e) => e.stopPropagation());
+
+      // 🖼️ 彈窗圖片對應表
+      const speciesImages = {
+        // 豹亞科 - 豹族
+        tree_neofelis_clouded:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Clouded_Leopard.jpg",
+        tree_neofelis_sunda:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Sunda_Clouded_Leopard.jpg",
+        tree_panthera_lion:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Lion.jpg",
+        tree_panthera_jaguar:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Jaguar.jpg",
+        tree_panthera_leopard:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Leopard.jpg",
+        tree_panthera_tiger:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Tiger.jpg",
+        tree_panthera_snow:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Snow_Leopard.jpg",
+
+        // 貓亞科 - 金貓族
+        tree_pardofelis_marbled:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Marbled_Cat.jpg",
+        tree_catopuma_bay:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Bay_Cat.png",
+        tree_catopuma_asian:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Asian_Golden_cat.jpg",
+
+        // 貓亞科 - 獰貓族
+        tree_leptailurus_serval:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Serval.jpg",
+        tree_caracal_caracal:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Caracal.jpg",
+        tree_profelis_african:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/African_Golden_Cat.jpg",
+
+        // 貓亞科 - 虎貓族
+        tree_leopardus_ocelot:
+          "http://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Ocelot.jpg",
+        tree_leopardus_margay:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Margay.jpg",
+        tree_leopardus_oncilla:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Oncilla.jpg",
+        tree_leopardus_andean:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Andean_Mountain_Cat.jpg",
+        tree_leopardus_pantanal:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Pantanal_Cat.jpeg",
+        tree_leopardus_pampas:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Pampas_Cat.jpg",
+        tree_leopardus_Kodkod:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Kodkod.jpg",
+        tree_leopardus_geoffroy:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Geoffroy's_Cat.jpg",
+
+        // 貓亞科 - 猞猁族
+        tree_lynx_canada:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Canada_Lynx.jpeg",
+        tree_lynx_eurasian:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Eurasian_Lynx.webp",
+        tree_lynx_iberian:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Iberian_Lynx.jpg",
+        tree_lynx_bobcat:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Bobcat.jpg",
+
+        // 貓亞科 - 美洲獅族
+        tree_puma_cougar:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Cougar.webp",
+        tree_puma_jaguarundi:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Jaguarundi.jpg",
+        tree_acinonyx_cheetah:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Cheetah.jpg",
+
+        // 貓亞科 - 豹貓族
+        tree_prionailurus_leopard:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Leopard_Cat.jpg",
+        tree_prionailurus_iriomote:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Iriomote_Cat.jpg",
+        tree_prionailurus_flat:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Flat-headed_Cat.jpg",
+        tree_prionailurus_rusty:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Rusty-spotted_Cat.jpg",
+        tree_prionailurus_fishing:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Fishing_Cat.jpg",
+        tree_otocolobus_pallas:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Pallas's_Cat.jpg",
+
+        // 貓亞科 - 貓族
+        tree_felis_domestic:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Domestic_Cat.webp",
+        tree_felis_wildcat:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/WildCat.jpg",
+        tree_felis_chinese:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Chinese_Mountain_Cat.jpg",
+        tree_felis_sand:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Sand_Cat.jpg",
+        tree_felis_blackfoot:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Black-footed_Cat.jpg",
+        tree_felis_jungle:
+          "https://raw.githubusercontent.com/MrCatcatsan/TRA3107-Project/master/img/Jungle_Cat.jpg",
+      };
+
+      const modal = document.getElementById("cat-modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalTitle = document.getElementById("modal-title");
+      const closeBtn = document.querySelector(".modal-close");
+
+      // 綁定樹狀圖節點點擊事件
+      document.querySelectorAll(".tree .node").forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        if (speciesImages[key]) {
+          node.style.cursor = "pointer"; // 有圖片的節點顯示可點擊游標
+          node.addEventListener("click", () => {
+            modalImg.src = speciesImages[key];
+            modalTitle.textContent =
+              translations[currentLang][key] || node.textContent;
+            modal.classList.add("active");
+          });
+        }
+      });
+
+      // 關閉彈窗邏輯
+      const closeModal = () => modal.classList.remove("active");
+      closeBtn.addEventListener("click", closeModal);
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+    </script>
+    <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+    <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmp71xfde00degygxpsi72cha'></zapier-interfaces-chatbot-embed>
+  </body>
+</html>
