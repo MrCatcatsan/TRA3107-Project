@@ -52,7 +52,12 @@
         align-items: center;
         justify-content: space-between;
         z-index: 100;
+         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
       }
+      header.nav-hidden {
+  transform: translateY(-100%);
+}
       .logo {
         font-size: 1.4rem;
         font-weight: 700;
@@ -1096,6 +1101,32 @@
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeModal();
       });
+      
+      // 📜 導覽列滾動隱藏/顯示邏輯
+(function() {
+  let lastScrollY = 0;
+  const header = document.querySelector('header');
+  const threshold = 50; // 滾動超過 50px 才觸發，避免頂部輕微抖動
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+    
+    // 回到頂部時強制顯示
+    if (currentScrollY <= threshold) {
+      header.classList.remove('nav-hidden');
+      return;
+    }
+
+    if (currentScrollY > lastScrollY) {
+      // 向下滑動 → 隱藏導覽列
+      header.classList.add('nav-hidden');
+    } else {
+      // 向上滑動 → 顯示導覽列
+      header.classList.remove('nav-hidden');
+    }
+    lastScrollY = currentScrollY;
+  });
+})();
     </script>
     <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
     <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmp71xfde00degygxpsi72cha'></zapier-interfaces-chatbot-embed>
